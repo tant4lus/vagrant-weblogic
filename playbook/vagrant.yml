@@ -1,0 +1,24 @@
+---
+# vagrant.yml
+- hosts: all
+  user: vagrant
+  sudo: True
+  tasks:
+
+  - name: Update Message of the Day
+    copy: src=files/motd dest=/etc/motd owner=root
+
+  - name: Update MOTD with hostname
+    lineinfile: dest=/etc/motd regexp='^(.*)%HOSTNAME%(.*)$' line='\1{{ ansible_hostname }}.{{ ansible_fqdn }}\2' backrefs=yes backup=yes
+
+  - name: Copy .bash_profile for root
+    copy: src=files/bash_profile dest=/root/.bash_profile owner=root
+
+  - name: Copy .bash_profile for vagrant
+    copy: src=files/bash_profile dest=/home/vagrant/.bash_profile owner=vagrant
+
+  - name: Install packages
+#    apt: pkg={{ item }} state=installed
+    yum: pkg={{ item }} state=installed
+    with_items:
+      - curl

@@ -1,0 +1,4 @@
+.vagrant
+vagrant_ansible_inventory_*
+Vagrantfile-*
+*/.DS_Store
